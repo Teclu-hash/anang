@@ -1,0 +1,24 @@
+dbname = Anang
+
+Run:
+  npm install
+  (create the database "Anang" in MySQL first)
+  npm start
+
+Routes (all under http://localhost:3006):
+  /api/user                GET /, GET /:id, POST /new, POST /login, PUT /:id, DELETE /:id
+  /api/borrower            GET /, GET /:id, POST /new, PUT /:id, DELETE /:id
+  /api/borrower-reference  GET /, GET /borrower/:borrowerId, GET /:id, POST /new, PUT /:id, DELETE /:id
+  /api/loan                GET /, GET /borrower/:borrowerId, GET /:id, POST /new, PUT /:id, DELETE /:id
+  /api/loan-payment        GET /, GET /loan/:loanId, GET /:id, POST /new, PUT /:id, DELETE /:id
+  /api/loan-penalty        GET /, GET /loan/:loanId, GET /:id, POST /new, PUT /:id, DELETE /:id
+
+  /api/setting             GET /, PUT / (admin only: interest_rate, interest_type)
+
+Notes:
+  - the interest rate is set by the admin (Settings page) and used for every new loan; it is not sent by the client
+  - loan-penalty POST /new adds the penalty to the loan's remaining_balance (active loans only)
+  - when a loan reaches balance 0 its unpaid penalties are marked paid
+  - interest_rate is percent per month. total_amount = simple or compound interest over loan_term (months)
+  - loan POST /new fills due_date, total_amount and remaining_balance if you leave them out
+  - loan-payment POST /new lowers the loan's remaining_balance (sets loan_status "paid" at 0)
